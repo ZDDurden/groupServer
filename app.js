@@ -1,10 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-require('dotenv').config()
+require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
 
-const MongoClient = require('mongodb').MongoClient;
+const MongoClient = require("mongodb").MongoClient;
 const uri = `mongodb+srv://zddurden:${process.env.DB_PASS}@cluster0-hamuy.mongodb.net/test?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true });
 client.connect(err => {
