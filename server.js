@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+
 const {
   Stitch,
   RemoteMongoClient,
@@ -57,6 +58,8 @@ const db = client
 //     console.error(err);
 //   });
 
+app.use(express.json());
+
 app.get("/bands", (req, res) => {
   client.auth
     .loginWithCredential(new AnonymousCredential())
@@ -99,50 +102,70 @@ app.get("/events", (req, res) => {
       console.log("Found docs", docs);
     });
 });
-app.post("/bands/:id", (req, res) => {
-  const data = Object.assign({}, req.body, {
-    created: new Date(),
-    updated: new Date()
-  });
+app.post("/bands", (req, res) => {
+  const data = {
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    location: req.body.location,
+    genre: req.body.genre,
+    bio: req.body.bio,
+    spotify: req.body.spotify,
+    social: req.body.social
+  };
   client.auth
     .loginWithCredential(new AnonymousCredential())
     .then(() =>
-      collection("Group4")
+      db
+        .collection("Group4")
         .insertOne(data)
         .then(doc => res.send(200, doc.ops[0]))
         .catch(err => res.send(500, err))
     )
-    .then(() => res.send(docs));
+    .then(data => res.send(data))
+    .catch(err => console.log(err));
 });
-app.post("/users/:id", (req, res) => {
-  const data = Object.assign({}, req.body, {
-    created: new Date(),
-    updated: new Date()
-  });
+app.post("/users", (req, res) => {
+  const data = {
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    dob: req.body.dob,
+    location: req.body.location,
+    likes: req.body.likes,
+    pic: req.body.pic,
+    bands: req.body.bands,
+    genres: req.body.genres
+  };
   client.auth
     .loginWithCredential(new AnonymousCredential())
     .then(() =>
-      collection("users")
+      db
+        .collection("users")
         .insertOne(data)
         .then(doc => res.send(200, doc.ops[0]))
         .catch(err => res.send(500, err))
     )
-    .then(() => res.send(docs));
+    .then(data => res.send(data))
+    .catch(err => console.log(err));
 });
-app.post("/events/:id", (req, res) => {
-  const data = Object.assign({}, req.body, {
-    created: new Date(),
-    updated: new Date()
-  });
+app.post("/events", (req, res) => {
+  const data = {
+    band: req.body.band,
+    location: req.body.location,
+    date: req.body.date
+  };
   client.auth
     .loginWithCredential(new AnonymousCredential())
     .then(() =>
-      collection("events")
+      db
+        .collection("events")
         .insertOne(data)
         .then(doc => res.send(200, doc.ops[0]))
         .catch(err => res.send(500, err))
     )
-    .then(() => res.send(docs));
+    .then(data => res.send(data))
+    .catch(err => console.log(err));
 });
 app.put("/bands/:id", (req, res) => {
   const data = Object.assign({}, req.body, {
@@ -155,7 +178,7 @@ app.put("/bands/:id", (req, res) => {
       upsert: true
     };
   client.auth.loginWithCredential(new AnonymousCredential());
-  collection("Group4")
+  db.collection("Group4")
     .findOneAndUpdate(query, body, opts)
     .then(doc => res.send(204))
     .catch(err => res.send(500, err));
@@ -171,7 +194,7 @@ app.put("/users/:id", (req, res) => {
       upsert: true
     };
   client.auth.loginWithCredential(new AnonymousCredential());
-  collection("users")
+  db.collection("users")
     .findOneAndUpdate(query, body, opts)
     .then(doc => res.send(204))
     .catch(err => res.send(500, err));
@@ -187,28 +210,28 @@ app.put("/events/:id", (req, res) => {
       upsert: true
     };
   client.auth.loginWithCredential(new AnonymousCredential());
-  collection("events")
+  db.collection("events")
     .findOneAndUpdate(query, body, opts)
     .then(doc => res.send(204))
     .catch(err => res.send(500, err));
 });
 app.delete("/bands/:id", (req, res) => {
   client.auth.loginWithCredential(new AnonymousCredential());
-  collection("Group4")
+  db.collection("Group4")
     .findOneAndDelete({ _id: req.params.id })
     .then(doc => res.send(204))
     .catch(err => res.send(500, err));
 });
 app.delete("/users/:id", (req, res) => {
   client.auth.loginWithCredential(new AnonymousCredential());
-  collection("users")
+  db.collection("users")
     .findOneAndDelete({ _id: req.params.id })
     .then(doc => res.send(204))
     .catch(err => res.send(500, err));
 });
 app.delete("/events/:id", (req, res) => {
   client.auth.loginWithCredential(new AnonymousCredential());
-  collection("events")
+  db.collection("events")
     .findOneAndDelete({ _id: req.params.id })
     .then(doc => res.send(204))
     .catch(err => res.send(500, err));
