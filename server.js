@@ -122,7 +122,7 @@ app.post("/users/:id", (req, res) => {
   client.auth
     .loginWithCredential(new AnonymousCredential())
     .then(() =>
-      collection("Group4")
+      collection("users")
         .insertOne(data)
         .then(doc => res.send(200, doc.ops[0]))
         .catch(err => res.send(500, err))
@@ -137,12 +137,60 @@ app.post("/events/:id", (req, res) => {
   client.auth
     .loginWithCredential(new AnonymousCredential())
     .then(() =>
-      collection("Group4")
+      collection("events")
         .insertOne(data)
         .then(doc => res.send(200, doc.ops[0]))
         .catch(err => res.send(500, err))
     )
     .then(() => res.send(docs));
+});
+app.put("/bands/:id", (req, res) => {
+  const data = Object.assign({}, req.body, {
+    updated: new Date()
+  });
+  let query = { _id: req.params.id },
+    body = { $set: data },
+    opts = {
+      returnOriginal: false,
+      upsert: true
+    };
+  client.auth.loginWithCredential(new AnonymousCredential());
+  collection("Group4")
+    .findOneAndUpdate(query, body, opts)
+    .then(doc => res.send(204))
+    .catch(err => res.send(500, err));
+});
+app.put("/users/:id", (req, res) => {
+  const data = Object.assign({}, req.body, {
+    updated: new Date()
+  });
+  let query = { _id: req.params.id },
+    body = { $set: data },
+    opts = {
+      returnOriginal: false,
+      upsert: true
+    };
+  client.auth.loginWithCredential(new AnonymousCredential());
+  collection("users")
+    .findOneAndUpdate(query, body, opts)
+    .then(doc => res.send(204))
+    .catch(err => res.send(500, err));
+});
+app.put("/events/:id", (req, res) => {
+  const data = Object.assign({}, req.body, {
+    updated: new Date()
+  });
+  let query = { _id: req.params.id },
+    body = { $set: data },
+    opts = {
+      returnOriginal: false,
+      upsert: true
+    };
+  client.auth.loginWithCredential(new AnonymousCredential());
+  collection("events")
+    .findOneAndUpdate(query, body, opts)
+    .then(doc => res.send(204))
+    .catch(err => res.send(500, err));
 });
 app.delete("/bands/:id", (req, res) => {
   client.auth.loginWithCredential(new AnonymousCredential());
