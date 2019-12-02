@@ -168,9 +168,16 @@ app.post("/events", (req, res) => {
     .catch(err => console.log(err));
 });
 app.put("/bands/:id", (req, res) => {
-  const data = Object.assign({}, req.body, {
-    updated: new Date()
-  });
+  const data = {
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    location: req.body.location,
+    genre: req.body.genre,
+    bio: req.body.bio,
+    spotify: req.body.spotify,
+    social: req.body.social
+  };
   let query = { _id: req.params.id },
     body = { $set: data },
     opts = {
@@ -184,9 +191,17 @@ app.put("/bands/:id", (req, res) => {
     .catch(err => res.send(500, err));
 });
 app.put("/users/:id", (req, res) => {
-  const data = Object.assign({}, req.body, {
-    updated: new Date()
-  });
+  const data = {
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    dob: req.body.dob,
+    location: req.body.location,
+    likes: req.body.likes,
+    pic: req.body.pic,
+    bands: req.body.bands,
+    genres: req.body.genres
+  };
   let query = { _id: req.params.id },
     body = { $set: data },
     opts = {
@@ -200,9 +215,11 @@ app.put("/users/:id", (req, res) => {
     .catch(err => res.send(500, err));
 });
 app.put("/events/:id", (req, res) => {
-  const data = Object.assign({}, req.body, {
-    updated: new Date()
-  });
+  const data = {
+    band: req.body.band,
+    location: req.body.location,
+    date: req.body.date
+  };
   let query = { _id: req.params.id },
     body = { $set: data },
     opts = {
