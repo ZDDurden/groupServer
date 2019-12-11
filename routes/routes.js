@@ -132,7 +132,9 @@ module.exports = function(app) {
       genre: req.body.genre,
       bio: req.body.bio,
       spotify: req.body.spotify,
-      social: req.body.social
+      facebook: req.body.facebook,
+      instagram: req.body.instagram,
+      dislikes: req.body.dislikes
     };
     client.auth
       .loginWithCredential(new AnonymousCredential())
@@ -200,7 +202,9 @@ module.exports = function(app) {
       genre: req.body.genre,
       bio: req.body.bio,
       spotify: req.body.spotify,
-      social: req.body.social
+      facebook: req.body.facebook,
+      instagram: req.body.instagram,
+      dislikes: req.body.dislikes
     };
     let query = { _id: ObjectID(req.params.id) },
       body = { $set: data },
